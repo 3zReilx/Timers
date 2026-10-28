@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101827">
+<title>Timer Hub | مركز التيمرات</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1120;--panel:#121c2e;--panel2:#17243a;--line:#293750;--text:#edf3ff;--muted:#9aaac4;--accent:#62e6be;--accent2:#48b9f2;--danger:#ff7185}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top right,#172c46 0,transparent 42%),var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;min-height:100vh}
+header{max-width:1100px;margin:auto;padding:28px 20px 12px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:15px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#07131f;font-size:25px;font-weight:900;box-shadow:0 8px 28px #48b9f233}
+h1{font-size:23px;margin:0}header p{color:var(--muted);margin:4px 0 0;font-size:13px}.status{font-size:12px;color:var(--accent);border:1px solid #28594f;background:#102d2a;padding:8px 12px;border-radius:999px}
+main{max-width:1100px;margin:auto;padding:16px 20px 50px}.intro{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin:16px 0 22px}.intro h2{margin:0 0 6px;font-size:27px}.intro p{margin:0;color:var(--muted);font-size:14px}
+.layout{display:grid;grid-template-columns:310px 1fr;gap:18px;align-items:start}.panel{background:linear-gradient(160deg,#152238,#101827);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 16px 45px #0002}.panel h3{margin:0 0 16px;font-size:17px}
+label{display:block;font-size:13px;color:#c5d2e8;margin:13px 0 7px}input{width:100%;background:#0b1322;border:1px solid #30415c;border-radius:11px;color:var(--text);padding:12px;font:inherit;outline:none}input:focus{border-color:var(--accent2)}.row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.row input{text-align:center;padding:11px 4px}.btn{border:0;border-radius:11px;padding:11px 14px;font:inherit;font-weight:700;cursor:pointer;transition:transform .15s,opacity .15s}.btn:hover{transform:translateY(-1px)}.btn:disabled{opacity:.5;cursor:not-allowed}.primary{background:linear-gradient(100deg,var(--accent),#8af0d4);color:#081a20;width:100%;margin-top:17px}.secondary{background:#24344d;color:var(--text);border:1px solid #344760}.small{padding:8px 10px;font-size:12px}.help{font-size:12px;color:var(--muted);line-height:1.7;margin:12px 0 0}.list-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}.list-head h3{margin:0}.count{font-size:12px;color:var(--muted);background:#1a2940;padding:6px 10px;border-radius:999px}
+.timers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.empty{grid-column:1/-1;border:1px dashed #344760;border-radius:16px;padding:38px 18px;text-align:center;color:var(--muted);line-height:1.8}.empty strong{display:block;color:var(--text);font-size:16px;margin-bottom:5px}.timer{background:#101a2b;border:1px solid #2b3b54;border-radius:17px;padding:16px;min-width:0;position:relative;overflow:hidden}.timer:before{content:"";position:absolute;right:0;top:0;bottom:0;width:3px;background:var(--accent2)}.timer.done:before{background:var(--danger)}.timer-top{display:flex;align-items:start;justify-content:space-between;gap:8px}.timer-name{font-weight:750;font-size:15px;overflow-wrap:anywhere}.state{font-size:11px;color:var(--accent);white-space:nowrap}.done .state{color:var(--danger)}.clock{font-variant-numeric:tabular-nums;font-size:clamp(27px,4vw,37px);font-weight:800;letter-spacing:1px;margin:18px 0 15px;direction:ltr;text-align:center}.timer-actions{display:flex;gap:7px;flex-wrap:wrap}.timer-actions .btn{flex:1}.timer-foot{font-size:11px;color:var(--muted);margin-top:12px;display:flex;justify-content:space-between;gap:8px}
+footer{max-width:1100px;margin:auto;padding:0 20px 26px;color:#7586a2;font-size:12px;line-height:1.8}.toast{position:fixed;bottom:20px;left:20px;right:20px;max-width:460px;margin:auto;background:#1b2c43;border:1px solid #3a5271;padding:13px 16px;border-radius:13px;box-shadow:0 10px 35px #0006;display:none;z-index:10}.toast.show{display:block}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.timers{grid-template-columns:1fr 1fr}}@media(max-width:520px){.timers{grid-template-columns:1fr}.intro h2{font-size:23px}.panel{padding:16px}header{padding-top:20px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo">◷</div><div><h1>Timer Hub</h1><p>مركز التيمرات — وقتك تحت السيطرة</p></div></div>
+  <div class="status">● حفظ تلقائي مفعّل</div>
+</header>
+<main>
+  <section class="intro"><div><h2>إدارة العدّ التنازلي</h2><p>أنشئ تيمرات متعددة، وشغّلها مع بعض، وسيب الموقع يحسب الوقت.</p></div><button id="soundEnable" class="btn secondary">🔔 تفعيل الصوت</button></section>
+  <div class="layout">
+    <aside class="panel">
+      <h3>＋ إضافة تيمر جديد</h3>
+      <form id="timerForm">
+        <label for="timerName">اسم التيمر</label><input id="timerName" maxlength="70" placeholder="مثال: وقت الجولة" required>
+        <label>المدة</label>
+        <div class="row">
+          <input id="hours" type="number" min="0" max="999" value="0" aria-label="ساعات" placeholder="ساعات">
+          <input id="minutes" type="number" min="0" max="59" value="5" aria-label="دقائق" placeholder="دقائق">
+          <input id="seconds" type="number" min="0" max="59" value="0" aria-label="ثواني" placeholder="ثواني">
+        </div>
+        <button class="btn primary" type="submit">إنشاء التيمر</button>
+      </form>
+      <p class="help">💡 الوقت بيكمل حسابه لو فتحت تبويب تاني. خلّي الصفحة مفتوحة لو عايز تضمن سماع الصوت. الحفظ بيتم على نفس المتصفح والجهاز.</p>
+    </aside>
+    <section class="panel">
+      <div class="list-head"><h3>التيمرات بتاعتك</h3><span id="timerCount" class="count">0 تيمر</span></div>
+      <div id="timers" class="timers"><div class="empty"><strong>لسه مفيش تيمرات</strong>اكتب اسم ومدة التيمر من القائمة الجانبية وابدأ.</div></div>
+    </section>
+  </div>
+</main>
+<footer>Timer Hub — نسخة تجريبية تعمل بدون حساب. التيمرات محفوظة على هذا المتصفح فقط؛ لو مسحت بيانات المتصفح أو فتحت الرابط من جهاز آخر، لن تنتقل التيمرات تلقائيًا.</footer>
+<div id="toast" class="toast" role="status"></div>
+<script>
+const STORAGE_KEY='timer-hub-v1';
+let timers=[], audioCtx=null, soundReady=false;
+const $=id=>document.getElementById(id);
+function now(){return Date.now()}
+function remaining(t){return t.done?0:Math.max(0,Math.ceil((t.endAt-now())/1000))}
+function fmt(s){s=Math.max(0,s|0);const h=Math.floor(s/3600),m=Math.floor(s%3600/60),sec=s%60;return [h,m,sec].map(n=>String(n).padStart(2,'0')).join(':')}
+function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(timers))}catch(e){toast('تعذّر الحفظ في المتصفح.');}}
+function toast(msg){$('toast').textContent=msg;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2800)}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function load(){try{const v=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');if(Array.isArray(v))timers=v.map(t=>({...t,done:!!t.done,paused:!!t.paused}));}catch(e){timers=[]}
+  // Account for timers that elapsed while the page was closed.
+  let changed=false;for(const t of timers){if(!t.paused&&!t.done&&t.endAt<=now()){t.done=true;t.left=0;changed=true;}}
+  if(changed)save();render();
+}
+function enableSound(){try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC){toast('المتصفح لا يدعم الصوت هنا.');return}audioCtx=audioCtx||new AC();if(audioCtx.state==='suspended')audioCtx.resume();soundReady=true;beep(660,.09);setTimeout(()=>beep(880,.12),130);$('soundEnable').textContent='✓ الصوت مفعّل';toast('الصوت اتفعّل بنجاح');}catch(e){toast('اضغط مرة تانية لتفعيل الصوت.');}}
+function beep(freq=880,dur=.22){if(!soundReady||!audioCtx)return;try{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.value=freq;g.gain.setValueAtTime(.0001,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.22,audioCtx.currentTime+.02);g.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+dur);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+dur+.02)}catch(e){}}
+function alertDone(t){beep(880,.22);setTimeout(()=>beep(660,.24),250);setTimeout(()=>beep(880,.28),520);try{if('Notification'in window&&Notification.permission==='granted')new Notification('انتهى التيمر',{body:t.name})}catch(e){}toast('⏰ انتهى التيمر: '+t.name)}
+function render(){const root=$('timers');$('timerCount').textContent=`${timers.length} تيمر`;if(!timers.length){root.innerHTML='<div class="empty"><strong>لسه مفيش تيمرات</strong>اكتب اسم ومدة التيمر من القائمة الجانبية وابدأ.</div>';return}
+root.innerHTML=timers.map(t=>{const r=t.paused?t.left:remaining(t);return `<article class="timer ${t.done?'done':''}" data-id="${t.id}"><div class="timer-top"><div class="timer-name">${escapeHtml(t.name)}</div><div class="state">${t.done?'انتهى':t.paused?'متوقف مؤقتًا':'● يعمل'}</div></div><div class="clock">${fmt(r)}</div><div class="timer-actions">${t.done?`<button class="btn secondary small" data-action="restart">إعادة</button>`:`<button class="btn secondary small" data-action="toggle">${t.paused?'استكمال':'إيقاف مؤقت'}</button><button class="btn secondary small" data-action="restart">إعادة</button>`}<button class="btn secondary small" data-action="delete">حذف</button></div><div class="timer-foot"><span>${t.done?'خلص الوقت':t.paused?'اضغط استكمال للمتابعة':'العدّ التنازلي شغّال'}</span><span>${new Date(t.createdAt).toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'})}</span></div></article>`}).join('')}
+$('timerForm').addEventListener('submit',e=>{e.preventDefault();const name=$('timerName').value.trim();const h=Number($('hours').value)||0,m=Number($('minutes').value)||0,s=Number($('seconds').value)||0;const total=h*3600+m*60+s;if(!name){toast('اكتب اسم التيمر الأول.');return}if(total<=0){toast('اختار مدة أكبر من صفر.');return}if(total>999*3600+3599){toast('المدة كبيرة جدًا.');return}timers.unshift({id:crypto.randomUUID?crypto.randomUUID():String(now())+Math.random(),name,duration:total,left:total,endAt:now()+total*1000,createdAt:now(),paused:false,done:false});$('timerName').value='';save();render();toast('تم إنشاء التيمر');});
+$('timers').addEventListener('click',e=>{const b=e.target.closest('button[data-action]');if(!b)return;const card=b.closest('[data-id]'),t=timers.find(x=>x.id===card.dataset.id);if(!t)return;switch(b.dataset.action){case'toggle':if(t.paused){t.endAt=now()+t.left*1000;t.paused=false}else{t.left=remaining(t);t.paused=true}break;case'restart':t.left=t.duration;t.endAt=now()+t.duration*1000;t.paused=false;t.done=false;break;case'delete':timers=timers.filter(x=>x.id!==t.id);break;}save();render()});
+$('soundEnable').addEventListener('click',enableSound);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){for(const t of timers){if(!t.paused&&!t.done&&remaining(t)===0){t.done=true;t.left=0;alertDone(t)}}save();render()}});
+setInterval(()=>{let changed=false;for(const t of timers){if(!t.paused&&!t.done&&remaining(t)===0){t.done=true;t.left=0;changed=true;alertDone(t)}}if(changed)save();render()},250);
+load();
+if('Notification'in window&&Notification.permission==='default'){/* Ask only after an explicit user gesture in browser-compatible flows. */}
+</script>
+</body>
+</html>
